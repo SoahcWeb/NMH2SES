@@ -1,0 +1,151 @@
+@page "/movies"
+@using NHM.Models
+@using NHM.Services
+@inject TmdbService TmdbService
+@inject FavoriteService FavoriteService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Movies</PageTitle>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="mb-4">Movies</h1>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label">Search by title</label>
+                            <input class="form-control"
+                                   placeholder="Search a movie title..."
+                                   @bind="searchTitle" />
+                        </div>
+                        <div class="col-md-4 d-grid">
+                            <button class="btn btn-primary" @onclick="SearchMoviesAsync">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(message))
+            {
+                <div class="alert alert-info mb-4">@message</div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                <div class="alert alert-danger mb-4">@errorMessage</div>
+            }
+
+            @if (isLoading)
+            {
+                <div class="text-center py-4">
+                    <p class="mb-0">Loading movies...</p>
+                </div>
+            }
+            else if (movies.Count > 0)
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var movie in movies)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                @if (!string.IsNullOrWhiteSpace(movie.PosterPath))
+                                {
+                                    <img src="@GetPosterUrl(movie.PosterPath)"
+                                         class="card-img-top"
+                                         alt="@movie.Title"
+                                         style="height: 360px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center justify-content-center bg-light text-muted"
+                                         style="height: 360px;">
+                                        No poster
+                                    </div>
+                                }
+
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">@movie.Title</h5>
+                                    <p class="card-text mb-4">Vote average: @movie.VoteAverage.ToString("0.0")</p>
+
+                                    <div class="mt-auto d-grid gap-2 d-md-flex">
+                                        <button class="btn btn-outline-primary flex-md-fill"
+                                                @onclick="() => GoToDetails(movie.Id)">
+                                            Details
+                                        </button>
+                                        <button class="btn btn-success flex-md-fill"
+                                                @onclick="() => AddToFavorites(movie)">
+                                            Add to favorites
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private string searchTitle = string.Empty;
+    private IReadOnlyList<Movie> movies = Array.Empty<Movie>();
+    private bool isLoading;
+    private string? message;
+    private string? errorMessage;
+
+    private async Task SearchMoviesAsync()
+    {
+        errorMessage = null;
+        message = null;
+
+        if (string.IsNullOrWhiteSpace(searchTitle))
+        {
+            movies = Array.Empty<Movie>();
+            message = "Enter a movie title to start searching.";
+            return;
+        }
+
+        try
+        {
+            isLoading = true;
+            movies = await TmdbService.SearchMoviesByTitleAsync(searchTitle.Trim());
+
+            if (movies.Count == 0)
+            {
+                message = "No movies found.";
+            }
+        }
+        catch
+        {
+            movies = Array.Empty<Movie>();
+            errorMessage = "An error occurred while loading movies.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void AddToFavorites(Movie movie)
+    {
+        FavoriteService.Add(movie);
+        message = $"\"{movie.Title}\" added to favorites.";
+        errorMessage = null;
+    }
+
+    private void GoToDetails(int movieId)
+    {
+        NavigationManager.NavigateTo($"/movie-details/{movieId}");
+    }
+
+    private static string GetPosterUrl(string posterPath)
+    {
+        return $"https://image.tmdb.org/t/p/w500{posterPath}";
+    }
+}
