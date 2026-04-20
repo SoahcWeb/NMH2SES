@@ -1,8 +1,11 @@
 @page "/favorites"
+@using System.Reflection
+@using System.Text.Json
 @using NHM.Models
 @using NHM.Services
 @inject FavoriteService FavoriteService
 @inject AuthService AuthService
+@inject IJSRuntime JS
 
 <PageTitle>Favorites</PageTitle>
 
@@ -23,15 +26,15 @@ else if (favoriteMovies.Count == 0)
 else
 {
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @foreach (var movie in favoriteMovies)
+        @foreach (var favorite in favoriteMovies)
         {
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    @if (!string.IsNullOrWhiteSpace(movie.PosterPath))
+                    @if (!string.IsNullOrWhiteSpace(favorite.Movie.PosterPath))
                     {
-                        <img src="@GetPosterUrl(movie.PosterPath)"
+                        <img src="@GetPosterUrl(favorite.Movie.PosterPath)"
                              class="card-img-top"
-                             alt="@movie.Title"
+                             alt="@favorite.Movie.Title"
                              style="height: 360px; object-fit: cover;" />
                     }
                     else
@@ -43,12 +46,40 @@ else
                     }
 
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">@movie.Title</h5>
+                        <h5 class="card-title">@favorite.Movie.Title</h5>
 
-                        <button class="btn btn-danger mt-auto"
-                                @onclick="() => RemoveFavorite(movie.Id)">
-                            Remove
-                        </button>
+                        <div class="mb-3">
+                            <label class="form-label">Your comment</label>
+                            <input class="form-control"
+                                   @bind="favorite.UserComment"
+                                   placeholder="Add your thoughts about this movie" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Your rating</label>
+                            <InputNumber @bind-Value="favorite.UserRating"
+                                         class="form-control"
+                                         min="1"
+                                         max="10" />
+                            <div class="form-text">Choose a rating from 1 to 10.</div>
+                        </div>
+
+                        @if (saveMessages.TryGetValue(favorite.Movie.Id, out var message))
+                        {
+                            <div class="text-success small mb-3">@message</div>
+                        }
+
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-primary"
+                                    @onclick="() => SaveMovieChangesAsync(favorite)">
+                                Save changes
+                            </button>
+
+                            <button class="btn btn-outline-danger"
+                                    @onclick="() => RemoveFavoriteAsync(favorite.Movie.Id)">
+                                Remove
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,7 +88,10 @@ else
 }
 
 @code {
-    private List<Movie> favoriteMovies = new();
+    private List<EditableFavoriteMovie> favoriteMovies = new();
+    private Dictionary<int, FavoriteMovieEdit> savedEdits = new();
+    private Dictionary<int, string> saveMessages = new();
+    private bool metadataLoaded;
 
     protected override void OnInitialized()
     {
@@ -69,22 +103,123 @@ else
         if (AuthService.IsAuthenticated())
         {
             LoadFavorites();
+            metadataLoaded = false;
+        }
+        else
+        {
+            favoriteMovies.Clear();
+            savedEdits.Clear();
+            saveMessages.Clear();
+            metadataLoaded = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (AuthService.IsAuthenticated() && !metadataLoaded)
+        {
+            metadataLoaded = true;
+            await LoadFavoriteEditsAsync();
+            LoadFavorites();
+            StateHasChanged();
         }
     }
 
     private void LoadFavorites()
     {
-        favoriteMovies = FavoriteService.GetAll().ToList();
+        favoriteMovies = FavoriteService
+            .GetAll()
+            .Select(movie =>
+            {
+                savedEdits.TryGetValue(movie.Id, out var edit);
+
+                return new EditableFavoriteMovie
+                {
+                    Movie = movie,
+                    UserComment = edit?.UserComment ?? string.Empty,
+                    UserRating = edit?.UserRating ?? 1
+                };
+            })
+            .ToList();
     }
 
-    private void RemoveFavorite(int movieId)
+    private async Task SaveMovieChangesAsync(EditableFavoriteMovie favorite)
+    {
+        favorite.UserRating = Math.Clamp(favorite.UserRating, 1, 10);
+
+        savedEdits[favorite.Movie.Id] = new FavoriteMovieEdit
+        {
+            UserComment = favorite.UserComment ?? string.Empty,
+            UserRating = favorite.UserRating
+        };
+
+        await PersistFavoriteEditsAsync();
+        InvokeFavoriteServiceSave();
+        saveMessages[favorite.Movie.Id] = "Changes saved.";
+    }
+
+    private async Task RemoveFavoriteAsync(int movieId)
     {
         FavoriteService.Remove(movieId);
+        savedEdits.Remove(movieId);
+        saveMessages.Remove(movieId);
         LoadFavorites();
+        await PersistFavoriteEditsAsync();
     }
 
     private static string GetPosterUrl(string posterPath)
     {
         return $"https://image.tmdb.org/t/p/w500{posterPath}";
+    }
+
+    private async Task LoadFavoriteEditsAsync()
+    {
+        var json = await JS.InvokeAsync<string?>("localStorage.getItem", GetFavoriteEditsStorageKey());
+
+        if (!string.IsNullOrWhiteSpace(json))
+        {
+            savedEdits = JsonSerializer.Deserialize<Dictionary<int, FavoriteMovieEdit>>(json) ?? new();
+            return;
+        }
+
+        savedEdits = new();
+    }
+
+    private async Task PersistFavoriteEditsAsync()
+    {
+        var editsToPersist = favoriteMovies.ToDictionary(
+            favorite => favorite.Movie.Id,
+            favorite => new FavoriteMovieEdit
+            {
+                UserComment = favorite.UserComment ?? string.Empty,
+                UserRating = Math.Clamp(favorite.UserRating, 1, 10)
+            });
+
+        var json = JsonSerializer.Serialize(editsToPersist);
+        await JS.InvokeVoidAsync("localStorage.setItem", GetFavoriteEditsStorageKey(), json);
+    }
+
+    private string GetFavoriteEditsStorageKey()
+    {
+        return $"favorite-movie-edits:{AuthService.GetCurrentUser()}";
+    }
+
+    private void InvokeFavoriteServiceSave()
+    {
+        var saveMethod = typeof(FavoriteService).GetMethod("Save", BindingFlags.Instance | BindingFlags.NonPublic);
+        saveMethod?.Invoke(FavoriteService, null);
+    }
+
+    private sealed class EditableFavoriteMovie
+    {
+        public required Movie Movie { get; init; }
+        public string UserComment { get; set; } = string.Empty;
+        public int UserRating { get; set; } = 1;
+    }
+
+    private sealed class FavoriteMovieEdit
+    {
+        public string UserComment { get; set; } = string.Empty;
+        public int UserRating { get; set; } = 1;
     }
 }
