@@ -14,11 +14,11 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri("https://api.themoviedb.org/3/")
 });
 
+// Auth service (IMPORTANT AVANT FavoriteService)
+builder.Services.AddScoped<AuthService>();
+
 // Services existants
 builder.Services.AddScoped<TmdbService>();
 builder.Services.AddScoped<FavoriteService>();
-
-// Auth service (simulation login)
-builder.Services.AddScoped<AuthService>();
 
 await builder.Build().RunAsync();

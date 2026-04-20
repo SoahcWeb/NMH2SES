@@ -2,24 +2,36 @@ namespace NHM.Services;
 
 public class AuthService
 {
-    private bool isAuthenticated;
+    private string? currentUser;
 
+    // Login simple simulé
     public bool Login(string username, string password)
     {
-        isAuthenticated =
-            !string.IsNullOrWhiteSpace(username) &&
-            !string.IsNullOrWhiteSpace(password);
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            currentUser = null;
+            return false;
+        }
 
-        return isAuthenticated;
+        currentUser = username.Trim();
+        return true;
     }
 
+    // Déconnexion
     public void Logout()
     {
-        isAuthenticated = false;
+        currentUser = null;
     }
 
+    // Vérifie si un utilisateur est connecté
     public bool IsAuthenticated()
     {
-        return isAuthenticated;
+        return currentUser != null;
+    }
+
+    // Retourne l'utilisateur connecté
+    public string? GetCurrentUser()
+    {
+        return currentUser;
     }
 }
