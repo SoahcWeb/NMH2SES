@@ -1,0 +1,60 @@
+@page "/login"
+@using NHM.Services
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login</PageTitle>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 text-center mb-4">Login</h1>
+
+                    @if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <div class="alert alert-danger">@errorMessage</div>
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input class="form-control" @bind="username" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <input class="form-control" type="password" @bind="password" />
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary" @onclick="HandleLogin">
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string username = string.Empty;
+    private string password = string.Empty;
+    private string? errorMessage;
+
+    private void HandleLogin()
+    {
+        var success = AuthService.Login(username, password);
+
+        if (success)
+        {
+            errorMessage = null;
+            NavigationManager.NavigateTo("/movies");
+        }
+        else
+        {
+            errorMessage = "Please enter a username and password.";
+        }
+    }
+}

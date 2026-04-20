@@ -2,12 +2,19 @@
 @using NHM.Models
 @using NHM.Services
 @inject FavoriteService FavoriteService
+@inject AuthService AuthService
 
 <PageTitle>Favorites</PageTitle>
 
 <h1 class="mb-4">Favorite Movies</h1>
 
-@if (favoriteMovies.Count == 0)
+@if (!AuthService.IsAuthenticated())
+{
+    <div class="alert alert-warning">
+        Please login
+    </div>
+}
+else if (favoriteMovies.Count == 0)
 {
     <div class="alert alert-info">
         No favorite movies yet.
@@ -55,6 +62,14 @@ else
     protected override void OnInitialized()
     {
         LoadFavorites();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (AuthService.IsAuthenticated())
+        {
+            LoadFavorites();
+        }
     }
 
     private void LoadFavorites()
