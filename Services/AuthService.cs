@@ -2,12 +2,19 @@ namespace NHM.Services;
 
 public class AuthService
 {
+    private const string ValidPassword = "password";
     private string? currentUser;
 
     // Login simple simulé
     public bool Login(string username, string password)
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            currentUser = null;
+            return false;
+        }
+
+        if (password != ValidPassword)
         {
             currentUser = null;
             return false;
