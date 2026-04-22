@@ -451,3 +451,82 @@ code {
         max-width: none;
     }
 }
+
+/* =========================
+   NHM CINEMATIC LAYER (SAFE OVERRIDE)
+   ========================= */
+
+/* background global uniquement (sans casser layout) */
+body {
+    background:
+        radial-gradient(circle at top left, rgba(82, 197, 255, 0.10), transparent 45%),
+        radial-gradient(circle at top right, rgba(238, 70, 201, 0.08), transparent 40%),
+        linear-gradient(180deg, #0b1028 0%, #0f0f2f 100%);
+}
+
+/* cards upgrade SANS casser Bootstrap */
+.card {
+    border-radius: 18px !important;
+    border: 1px solid rgba(82, 197, 255, 0.12) !important;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.18) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(82, 197, 255, 0.18) !important;
+}
+
+/* images sans casser layout */
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.04);
+}
+
+/* buttons upgrade doux */
+.btn-primary {
+    background: linear-gradient(135deg, #52c5ff, #1e3a8a) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #3be58d, #2bb673) !important;
+    border: none !important;
+}
+
+.btn-outline-danger {
+    color: #ff668d !important;
+    border: 1px solid rgba(255,102,141,0.4) !important;
+}
+
+/* forms harmonisés sans casser Bootstrap */
+.form-control {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(82, 197, 255, 0.15) !important;
+    color: #f4f7ff !important;
+}
+
+.form-control:focus {
+    border-color: #52c5ff !important;
+    box-shadow: 0 0 0 3px rgba(82,197,255,0.15) !important;
+}
+
+/* alerts soft dark */
+.alert {
+    background: rgba(10,14,40,0.6) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    color: #f4f7ff !important;
+}
+
+/* IMPORTANT: empêche overlays cassants */
+.card::before,
+.card::after,
+.hero-panel::before,
+.hero-panel::after {
+    display: none !important;
+}
