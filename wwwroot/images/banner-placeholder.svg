@@ -1,0 +1,28 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="640" rx="48" fill="url(#bg)" />
+  <circle cx="742" cy="176" r="116" fill="url(#sun)" fill-opacity="0.9" />
+  <circle cx="742" cy="176" r="148" stroke="white" stroke-opacity="0.2" stroke-width="2" />
+  <path d="M168 442C168 383.458 215.458 336 274 336H576C634.542 336 682 383.458 682 442V468C682 526.542 634.542 574 576 574H274C215.458 574 168 526.542 168 468V442Z" fill="white" fill-opacity="0.9" />
+  <rect x="218" y="386" width="160" height="18" rx="9" fill="#DBEAFE" />
+  <rect x="218" y="420" width="248" height="40" rx="20" fill="#1D4ED8" />
+  <rect x="218" y="480" width="208" height="18" rx="9" fill="#CBD5E1" />
+  <rect x="218" y="512" width="140" height="18" rx="9" fill="#E2E8F0" />
+  <rect x="514" y="384" width="120" height="144" rx="24" fill="#F97316" />
+  <path d="M554 420H594V452H554V420Z" fill="white" fill-opacity="0.92" />
+  <path d="M554 468H594V500H554V468Z" fill="white" fill-opacity="0.92" />
+  <path d="M618 282C618 245.549 647.549 216 684 216H792C828.451 216 858 245.549 858 282V390C858 426.451 828.451 456 792 456H684C647.549 456 618 426.451 618 390V282Z" fill="white" fill-opacity="0.14" />
+  <path d="M678 292L778 348L678 404V292Z" fill="white" fill-opacity="0.85" />
+  <text x="218" y="298" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700">NHM</text>
+  <text x="218" y="326" fill="white" fill-opacity="0.78" font-family="Arial, sans-serif" font-size="20">Your movie space, refreshed.</text>
+  <defs>
+    <linearGradient id="bg" x1="88" y1="40" x2="876" y2="608" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A" />
+      <stop offset="0.5" stop-color="#1D4ED8" />
+      <stop offset="1" stop-color="#0EA5E9" />
+    </linearGradient>
+    <linearGradient id="sun" x1="626" y1="76" x2="854" y2="292" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE68A" />
+      <stop offset="1" stop-color="#F97316" />
+    </linearGradient>
+  </defs>
+</svg>
