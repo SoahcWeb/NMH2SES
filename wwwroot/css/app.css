@@ -530,3 +530,169 @@ body {
 .hero-panel::after {
     display: none !important;
 }
+
+/* =========================
+   HOME CENTERED LAYOUT
+   ========================= */
+
+.home-layout-centered {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.home-main-centered {
+    max-width: 1000px;
+    width: 100%;
+    text-align: center;
+}
+
+/* TITRES (ta demande exacte) */
+h1 {
+    font-size: 3rem;
+    color: #52C5FF;
+    margin-bottom: 5px;
+    text-shadow: 0 0 12px rgba(82,197,255,0.5);
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #52C5FF;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(82,197,255,0.4);
+}
+
+/* SEPARATOR */
+.section-divider {
+    height: 2px;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    background: linear-gradient(to right, #0F0F2F, #0F4F8F, #0F0F2F);
+}
+
+/* CARDS centrées */
+.home-features-two {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(82,197,255,0.2);
+    text-align: center;
+}
+
+.library-card {
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+/* actions centrées */
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   FAVORITES NHM STYLE
+   ========================= */
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* card style identique Home */
+.favorite-card {
+    text-align: center;
+    padding: 20px;
+}
+
+/* poster film */
+.favorite-poster {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 15px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+/* fallback image */
+.no-image {
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+/* actions */
+.favorite-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* message save */
+.save-message {
+    margin-top: 10px;
+    color: #3be58d;
+    font-weight: bold;
+}
+
+/* =========================
+   FORM TEXT FIX (GLOBAL - NHM SAFE OVERRIDE)
+   ========================= */
+
+/* Texte des champs en noir */
+input,
+textarea,
+select,
+.form-control,
+.form-select {
+    color: #000000 !important;
+}
+
+/* Fond blanc pour lisibilité */
+input,
+textarea,
+select,
+.form-control,
+.form-select {
+    background-color: #ffffff !important;
+}
+
+/* Placeholder plus doux */
+input::placeholder,
+textarea::placeholder {
+    color: #666666 !important;
+    opacity: 1;
+}
+
+/* Focus propre NHM (garde ton style bleu) */
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border-color: #52C5FF !important;
+    box-shadow: 0 0 0 3px rgba(82,197,255,0.15) !important;
+}

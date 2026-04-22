@@ -5,25 +5,25 @@
 @inject FavoriteService FavoriteService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Movies</PageTitle>
+<PageTitle>Films</PageTitle>
 
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <h1 class="mb-4">Movies</h1>
+            <h1 class="mb-4">Films</h1>
 
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <div class="row g-2 align-items-end">
                         <div class="col-md-8">
-                            <label class="form-label">Search by title</label>
+                            <label class="form-label">Rechercher par titre</label>
                             <input class="form-control"
-                                   placeholder="Search a movie title..."
+                                   placeholder="Rechercher un titre de film..."
                                    @bind="searchTitle" />
                         </div>
                         <div class="col-md-4 d-grid">
                             <button class="btn btn-primary" @onclick="SearchMoviesAsync">
-                                Search
+                                Rechercher
                             </button>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
             @if (isLoading)
             {
                 <div class="text-center py-4">
-                    <p class="mb-0">Loading movies...</p>
+                    <p class="mb-0">Chargement des films...</p>
                 </div>
             }
             else if (movies.Count > 0)
@@ -64,22 +64,22 @@
                                 {
                                     <div class="d-flex align-items-center justify-content-center bg-light text-muted"
                                          style="height: 360px;">
-                                        No poster
+                                        Aucune affiche
                                     </div>
                                 }
 
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">@movie.Title</h5>
-                                    <p class="card-text mb-4">Vote average: @movie.VoteAverage.ToString("0.0")</p>
+                                    <p class="card-text mb-4">Note moyenne : @movie.VoteAverage.ToString("0.0")</p>
 
                                     <div class="mt-auto d-grid gap-2 d-md-flex">
                                         <button class="btn btn-outline-primary flex-md-fill"
                                                 @onclick="() => GoToDetails(movie.Id)">
-                                            Details
+                                            Détails
                                         </button>
                                         <button class="btn btn-success flex-md-fill"
                                                 @onclick="() => AddToFavorites(movie)">
-                                            Add to favorites
+                                            Ajouter aux favoris
                                         </button>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
         if (string.IsNullOrWhiteSpace(searchTitle))
         {
             movies = Array.Empty<Movie>();
-            message = "Enter a movie title to start searching.";
+            message = "Saisis un titre de film pour lancer la recherche.";
             return;
         }
 
@@ -118,13 +118,13 @@
 
             if (movies.Count == 0)
             {
-                message = "No movies found.";
+                message = "Aucun film trouvé.";
             }
         }
         catch
         {
             movies = Array.Empty<Movie>();
-            errorMessage = "An error occurred while loading movies.";
+            errorMessage = "Une erreur s'est produite lors du chargement des films.";
         }
         finally
         {
@@ -135,7 +135,7 @@
     private void AddToFavorites(Movie movie)
     {
         FavoriteService.Add(movie);
-        message = $"\"{movie.Title}\" added to favorites.";
+        message = $"\"{movie.Title}\" ajouté aux favoris.";
         errorMessage = null;
     }
 

@@ -7,85 +7,98 @@
 @inject AuthService AuthService
 @inject IJSRuntime JS
 
-<PageTitle>Favorites</PageTitle>
+<PageTitle>Favoris</PageTitle>
 
-<h1 class="mb-4">Favorite Movies</h1>
+<div class="favorites-layout">
 
-@if (!AuthService.IsAuthenticated())
-{
-    <div class="alert alert-warning">
-        Please login
-    </div>
-}
-else if (favoriteMovies.Count == 0)
-{
-    <div class="alert alert-info">
-        No favorite movies yet.
-    </div>
-}
-else
-{
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @foreach (var favorite in favoriteMovies)
-        {
-            <div class="col">
-                <div class="card h-100 shadow-sm">
+    <h1 class="home-title">Tes films favoris</h1>
+
+    <div class="section-divider"></div>
+
+    @if (!AuthService.IsAuthenticated())
+    {
+        <div class="surface-card surface-card--centered">
+            <h2>Accès requis</h2>
+            <p>Tu dois être connecté pour accéder à tes favoris.</p>
+
+            <a class="app-button app-button--primary" href="/login">
+                Se connecter
+            </a>
+        </div>
+    }
+    else if (favoriteMovies.Count == 0)
+    {
+        <div class="surface-card surface-card--centered">
+            <h2>Aucun favori</h2>
+            <p>Tu n’as pas encore ajouté de films à tes favoris.</p>
+
+            <a class="app-button app-button--secondary" href="/movies">
+                Explorer les films
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="favorites-grid">
+
+            @foreach (var favorite in favoriteMovies)
+            {
+                <div class="surface-card favorite-card">
+
                     @if (!string.IsNullOrWhiteSpace(favorite.Movie.PosterPath))
                     {
-                        <img src="@GetPosterUrl(favorite.Movie.PosterPath)"
-                             class="card-img-top"
-                             alt="@favorite.Movie.Title"
-                             style="height: 360px; object-fit: cover;" />
+                        <img class="favorite-poster"
+                             src="@GetPosterUrl(favorite.Movie.PosterPath)"
+                             alt="@favorite.Movie.Title" />
                     }
                     else
                     {
-                        <div class="d-flex align-items-center justify-content-center bg-light text-muted"
-                             style="height: 360px;">
-                            No image
+                        <div class="favorite-placeholder">
+                            Aucune image
                         </div>
                     }
 
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">@favorite.Movie.Title</h5>
+                    <div class="favorite-content">
 
-                        <div class="mb-3">
-                            <label class="form-label">Your comment</label>
-                            <input class="form-control"
-                                   @bind="favorite.UserComment"
-                                   placeholder="Add your thoughts about this movie" />
-                        </div>
+                        <h2 class="favorite-title">@favorite.Movie.Title</h2>
 
-                        <div class="mb-3">
-                            <label class="form-label">Your rating</label>
-                            <InputNumber @bind-Value="favorite.UserRating"
-                                         class="form-control"
-                                         min="1"
-                                         max="10" />
-                            <div class="form-text">Choose a rating from 1 to 10.</div>
-                        </div>
+                        <label>Commentaire</label>
+                        <input class="form-control"
+                               @bind="favorite.UserComment"
+                               placeholder="Ajoute ton avis..." />
+
+                        <label>Note (1 - 10)</label>
+                        <InputNumber class="form-control"
+                                     @bind-Value="favorite.UserRating"
+                                     min="1"
+                                     max="10" />
 
                         @if (saveMessages.TryGetValue(favorite.Movie.Id, out var message))
                         {
-                            <div class="text-success small mb-3">@message</div>
+                            <p class="favorite-success">@message</p>
                         }
 
-                        <div class="d-flex gap-2 mt-auto">
-                            <button class="btn btn-primary"
+                        <div class="favorite-actions">
+                            <button class="app-button app-button--primary"
                                     @onclick="() => SaveMovieChangesAsync(favorite)">
-                                Save changes
+                                Enregistrer
                             </button>
 
-                            <button class="btn btn-outline-danger"
+                            <button class="app-button app-button--secondary"
                                     @onclick="() => RemoveFavoriteAsync(favorite.Movie.Id)">
-                                Remove
+                                Supprimer
                             </button>
                         </div>
+
                     </div>
+
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+
+        </div>
+    }
+
+</div>
 
 @code {
     private List<EditableFavoriteMovie> favoriteMovies = new();
@@ -155,7 +168,7 @@ else
 
         await PersistFavoriteEditsAsync();
         InvokeFavoriteServiceSave();
-        saveMessages[favorite.Movie.Id] = "Changes saved.";
+        saveMessages[favorite.Movie.Id] = "Modifications enregistrées.";
     }
 
     private async Task RemoveFavoriteAsync(int movieId)
@@ -168,45 +181,31 @@ else
     }
 
     private static string GetPosterUrl(string posterPath)
-    {
-        return $"https://image.tmdb.org/t/p/w500{posterPath}";
-    }
+        => $"https://image.tmdb.org/t/p/w500{posterPath}";
 
     private async Task LoadFavoriteEditsAsync()
     {
         var json = await JS.InvokeAsync<string?>("localStorage.getItem", GetFavoriteEditsStorageKey());
 
-        if (!string.IsNullOrWhiteSpace(json))
-        {
-            savedEdits = JsonSerializer.Deserialize<Dictionary<int, FavoriteMovieEdit>>(json) ?? new();
-            return;
-        }
-
-        savedEdits = new();
+        savedEdits = !string.IsNullOrWhiteSpace(json)
+            ? JsonSerializer.Deserialize<Dictionary<int, FavoriteMovieEdit>>(json) ?? new()
+            : new();
     }
 
     private async Task PersistFavoriteEditsAsync()
     {
-        var editsToPersist = favoriteMovies.ToDictionary(
-            favorite => favorite.Movie.Id,
-            favorite => new FavoriteMovieEdit
-            {
-                UserComment = favorite.UserComment ?? string.Empty,
-                UserRating = Math.Clamp(favorite.UserRating, 1, 10)
-            });
-
-        var json = JsonSerializer.Serialize(editsToPersist);
+        var json = JsonSerializer.Serialize(savedEdits);
         await JS.InvokeVoidAsync("localStorage.setItem", GetFavoriteEditsStorageKey(), json);
     }
 
     private string GetFavoriteEditsStorageKey()
-    {
-        return $"favorite-movie-edits:{AuthService.GetCurrentUser()}";
-    }
+        => $"favorite-movie-edits:{AuthService.GetCurrentUser()}";
 
     private void InvokeFavoriteServiceSave()
     {
-        var saveMethod = typeof(FavoriteService).GetMethod("Save", BindingFlags.Instance | BindingFlags.NonPublic);
+        var saveMethod = typeof(FavoriteService)
+            .GetMethod("Save", BindingFlags.Instance | BindingFlags.NonPublic);
+
         saveMethod?.Invoke(FavoriteService, null);
     }
 

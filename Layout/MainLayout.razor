@@ -10,7 +10,7 @@
                 <span class="brand-link__badge">NH</span>
                 <span class="brand-link__copy">
                     <span class="brand-link__title">NHM</span>
-                    <span class="brand-link__subtitle">Movie discovery hub</span>
+                    <span class="brand-link__subtitle">Hub de découverte de films</span>
                 </span>
             </a>
 
@@ -19,12 +19,12 @@
             <div class="auth-toolbar">
                 @if (AuthService.IsAuthenticated())
                 {
-                    <span class="auth-toolbar__welcome">Bienvenue @AuthService.GetCurrentUser()</span>
-                    <button type="button" class="app-button app-button--secondary" @onclick="HandleLogout">Logout</button>
+                    <span class="auth-toolbar__welcome">Bienvenue, @AuthService.GetCurrentUser()</span>
+                    <button type="button" class="app-button app-button--secondary" @onclick="HandleLogout">Déconnexion</button>
                 }
                 else
                 {
-                    <NavLink class="app-button app-button--primary" href="login">Login</NavLink>
+                    <NavLink class="app-button app-button--primary" href="login">Connexion</NavLink>
                 }
             </div>
         </div>

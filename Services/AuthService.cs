@@ -13,6 +13,13 @@ public class AuthService
             return false;
         }
 
+        // FIX MINIMAL : validation du mot de passe
+        if (password != "password")
+        {
+            currentUser = null;
+            return false;
+        }
+
         currentUser = username.Trim();
         return true;
     }

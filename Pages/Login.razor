@@ -3,14 +3,14 @@
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Login</PageTitle>
+<PageTitle>Connexion</PageTitle>
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-                    <h1 class="h3 text-center mb-4">Login</h1>
+                    <h1 class="h3 text-center mb-4">Connexion</h1>
 
                     @if (!string.IsNullOrWhiteSpace(errorMessage))
                     {
@@ -18,18 +18,18 @@
                     }
 
                     <div class="mb-3">
-                        <label class="form-label">Username</label>
+                        <label class="form-label">Nom d'utilisateur</label>
                         <input class="form-control" @bind="username" />
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label">Password</label>
+                        <label class="form-label">Mot de passe</label>
                         <input class="form-control" type="password" @bind="password" />
                     </div>
 
                     <div class="d-grid">
                         <button class="btn btn-primary" @onclick="HandleLogin">
-                            Login
+                            Connexion
                         </button>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
         }
         else
         {
-            errorMessage = "Please enter a username and password.";
+            errorMessage = "Veuillez saisir un nom d'utilisateur et un mot de passe.";
         }
     }
 }
