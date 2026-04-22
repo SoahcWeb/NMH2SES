@@ -1,16 +1,46 @@
-﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@using NHM.Services
+@inherits LayoutComponentBase
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<div class="app-shell">
+    <header class="app-header">
+        <div class="app-header__inner">
+            <a class="brand-link" href="">
+                <span class="brand-link__badge">NH</span>
+                <span class="brand-link__copy">
+                    <span class="brand-link__title">NHM</span>
+                    <span class="brand-link__subtitle">Movie discovery hub</span>
+                </span>
+            </a>
+
+            <NavMenu />
+
+            <div class="auth-toolbar">
+                @if (AuthService.IsAuthenticated())
+                {
+                    <span class="auth-toolbar__welcome">Bienvenue @AuthService.GetCurrentUser()</span>
+                    <button type="button" class="app-button app-button--secondary" @onclick="HandleLogout">Logout</button>
+                }
+                else
+                {
+                    <NavLink class="app-button app-button--primary" href="login">Login</NavLink>
+                }
+            </div>
         </div>
+    </header>
 
-        <article class="content px-4">
+    <main class="app-shell__main">
+        <div class="app-shell__content">
             @Body
-        </article>
+        </div>
     </main>
 </div>
+
+@code {
+    private void HandleLogout()
+    {
+        AuthService.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+}

@@ -1,7 +1,58 @@
-﻿@page "/"
+@page "/"
+@using NHM.Services
+@inject AuthService AuthService
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<section class="hero-panel">
+    <div class="hero-panel__copy">
+        <span class="hero-panel__eyebrow">A cleaner way to explore films</span>
+        <h1>Discover movies, save favorites, and keep your watchlist experience focused.</h1>
+        <p class="hero-panel__text">
+            NHM brings movie discovery and personal favorites together in a simple Blazor WebAssembly experience built for speed and clarity.
+        </p>
 
-Welcome to your new app.
+        <div class="hero-panel__actions">
+            <NavLink class="app-button app-button--primary" href="movies">Browse Movies</NavLink>
+
+            @if (AuthService.IsAuthenticated())
+            {
+                <NavLink class="app-button app-button--secondary" href="favorites">Open Favorites</NavLink>
+            }
+            else
+            {
+                <NavLink class="app-button app-button--secondary" href="login">Login to Continue</NavLink>
+            }
+        </div>
+
+        <div class="hero-panel__highlights">
+            <span class="info-chip">Responsive layout</span>
+            <span class="info-chip">Personal favorites</span>
+            <span class="info-chip">Modern Blazor UI</span>
+        </div>
+    </div>
+
+    <div class="hero-panel__media">
+        <img class="hero-panel__image" src="/images/banner-placeholder.svg" alt="NHM banner placeholder" />
+    </div>
+</section>
+
+<section class="feature-grid">
+    <article class="surface-card">
+        <p class="feature-card__eyebrow">Browse</p>
+        <h2>Explore the catalog</h2>
+        <p>Navigate your movie list with a cleaner interface, lighter spacing, and better visual hierarchy.</p>
+    </article>
+
+    <article class="surface-card">
+        <p class="feature-card__eyebrow">Save</p>
+        <h2>Keep favorites organized</h2>
+        <p>Authenticated users can jump straight back into their favorites and continue managing personal notes.</p>
+    </article>
+
+    <article class="surface-card">
+        <p class="feature-card__eyebrow">Enjoy</p>
+        <h2>Stay focused</h2>
+        <p>The updated shell keeps navigation, authentication, and content centered around the viewing experience.</p>
+    </article>
+</section>
