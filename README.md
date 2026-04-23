@@ -26,7 +26,7 @@ L’application permet à un utilisateur de :
 - Session utilisateur simulée
 - Protection de la page favoris
 
-### ⭐ Favoris
+###  Favoris
 - Ajout de films en favoris
 - Suppression de favoris
 - Favoris liés à l’utilisateur connecté
@@ -123,6 +123,6 @@ Les favoris sont :
 
 ---
 
-## 👨‍💻 Auteur
+##  Auteur
 
-Projet réalisé dans le cadre d’un examen de développement web avec Blazor.
+Projet réalisé par Jonathan Pauwels dans le cadre d’un examen de développement web avec Blazor.
