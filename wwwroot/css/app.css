@@ -125,7 +125,7 @@ p {
 .app-nav__link {
     padding: 0.7rem 1rem;
     border-radius: 999px;
-    color: var(--color-muted);
+    color: #52C5FF;
     font-weight: 600;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
@@ -450,4 +450,390 @@ code {
     .hero-panel h1 {
         max-width: none;
     }
+}
+
+/* =========================
+   NHM CINEMATIC LAYER (SAFE OVERRIDE)
+   ========================= */
+
+/* background global uniquement (sans casser layout) */
+body {
+    background:
+        radial-gradient(circle at top left, rgba(82, 197, 255, 0.10), transparent 45%),
+        radial-gradient(circle at top right, rgba(238, 70, 201, 0.08), transparent 40%),
+        linear-gradient(180deg, #0b1028 0%, #0f0f2f 100%);
+}
+
+/* cards upgrade SANS casser Bootstrap */
+.card {
+    border-radius: 18px !important;
+    border: 1px solid rgba(82, 197, 255, 0.12) !important;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.18) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(82, 197, 255, 0.18) !important;
+}
+
+/* images sans casser layout */
+.card-img-top {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.04);
+}
+
+/* buttons upgrade doux */
+.btn-primary {
+    background: linear-gradient(135deg, #52c5ff, #1e3a8a) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #3be58d, #2bb673) !important;
+    border: none !important;
+}
+
+.btn-outline-danger {
+    color: #ff668d !important;
+    border: 1px solid rgba(255,102,141,0.4) !important;
+}
+
+/* forms harmonisés sans casser Bootstrap */
+.form-control {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(82, 197, 255, 0.15) !important;
+    color: #f4f7ff !important;
+}
+
+.form-control:focus {
+    border-color: #52c5ff !important;
+    box-shadow: 0 0 0 3px rgba(82,197,255,0.15) !important;
+}
+
+/* alerts soft dark */
+.alert {
+    background: rgba(10,14,40,0.6) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    color: #f4f7ff !important;
+}
+
+/* IMPORTANT: empêche overlays cassants */
+.card::before,
+.card::after,
+.hero-panel::before,
+.hero-panel::after {
+    display: none !important;
+}
+
+/* =========================
+   HOME CENTERED LAYOUT
+   ========================= */
+
+.home-layout-centered {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.home-main-centered {
+    max-width: 1000px;
+    width: 100%;
+    text-align: center;
+}
+
+/* TITRES (ta demande exacte) */
+h1 {
+    font-size: 3rem;
+    color: #52C5FF;
+    margin-bottom: 5px;
+    text-shadow: 0 0 12px rgba(82,197,255,0.5);
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #52C5FF;
+    margin-bottom: 25px;
+    text-shadow: 0 0 10px rgba(82,197,255,0.4);
+}
+
+/* SEPARATOR */
+.section-divider {
+    height: 2px;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    background: linear-gradient(to right, #0F0F2F, #0F4F8F, #0F0F2F);
+}
+
+/* CARDS centrées */
+.home-features-two {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(82,197,255,0.2);
+    text-align: center;
+}
+
+.library-card {
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+/* actions centrées */
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   FAVORITES NHM STYLE
+   ========================= */
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* card style identique Home */
+.favorite-card {
+    text-align: center;
+    padding: 20px;
+}
+
+/* poster film */
+.favorite-poster {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 15px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+/* fallback image */
+.no-image {
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+/* actions */
+.favorite-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* message save */
+.save-message {
+    margin-top: 10px;
+    color: #3be58d;
+    font-weight: bold;
+}
+
+/* =========================
+   FORM TEXT FIX (GLOBAL - NHM SAFE OVERRIDE)
+   ========================= */
+
+/* Texte des champs en noir */
+input,
+textarea,
+select,
+.form-control,
+.form-select {
+    color: #000000 !important;
+}
+
+/* Fond blanc pour lisibilité */
+input,
+textarea,
+select,
+.form-control,
+.form-select {
+    background-color: #ffffff !important;
+}
+
+/* Placeholder plus doux */
+input::placeholder,
+textarea::placeholder {
+    color: #666666 !important;
+    opacity: 1;
+}
+
+/* Focus propre NHM (garde ton style bleu) */
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+    border-color: #52C5FF !important;
+    box-shadow: 0 0 0 3px rgba(82,197,255,0.15) !important;
+}
+
+/* =========================
+   MOVIE DETAILS STYLE
+   ========================= */
+
+.movie-details-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* résumé */
+.movie-overview {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* stats */
+.movie-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(82,197,255,0.2);
+    border-radius: 12px;
+    padding: 10px 20px;
+    min-width: 120px;
+}
+
+.stat-box strong {
+    display: block;
+    color: #52C5FF;
+}
+
+.stat-box span {
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* =========================
+   MOVIE BACKGROUND EFFECT (NETFLIX STYLE)
+   ========================= */
+
+.movie-details-card {
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+/* overlay sombre + dégradé (BONUS inclus) */
+.movie-details-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(10,14,40,0.6),
+        rgba(10,14,40,0.95)
+    );
+    backdrop-filter: blur(8px);
+    z-index: 0;
+}
+
+/* contenu au-dessus */
+.movie-details-card * {
+    position: relative;
+    z-index: 1;
+}
+
+.favorite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(82,197,255,0.3);
+}
+
+/* =========================
+   LOGIN NHM STYLE
+   ========================= */
+
+.login-card {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* champs espacés */
+.login-card input {
+    margin-bottom: 15px;
+}
+
+/* message erreur stylé */
+.login-error {
+    color: #ff668d;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* =========================
+   NAVBAR BACKGROUND IMAGE
+   ========================= */
+
+.app-nav {
+    position: relative;
+    border-radius: 999px;
+    overflow: hidden;
+
+    background-image: url('/images/ban004.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* overlay pour lisibilité */
+.app-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to right,
+        rgba(10,14,40,0.85),
+        rgba(10,14,40,0.65),
+        rgba(10,14,40,0.85)
+    );
+
+    backdrop-filter: blur(6px);
+    z-index: 0;
+}
+
+/* liens au-dessus */
+.app-nav__link {
+    position: relative;
+    z-index: 1;
 }

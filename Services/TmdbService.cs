@@ -49,6 +49,45 @@ public class TmdbService
         return _httpClient.GetFromJsonAsync<Movie>(requestUri, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Movie>> GetPopularMoviesAsync(int page = 1)
+    {
+        if (page <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(page));
+        }
+
+        var requestUri =
+            $"movie/popular?api_key={Uri.EscapeDataString(_apiKey)}&page={page}";
+
+        var response = await _httpClient.GetFromJsonAsync<TmdbSearchResponse>(requestUri);
+
+        return response?.Results?.ToArray() ?? Array.Empty<Movie>();
+    }
+
+    public async Task<IReadOnlyList<Movie>> GetNowPlayingMoviesAsync(int page = 1)
+    {
+        if (page <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(page));
+        }
+
+        var requestUri =
+            $"movie/now_playing?api_key={Uri.EscapeDataString(_apiKey)}&page={page}";
+
+        var response = await _httpClient.GetFromJsonAsync<TmdbSearchResponse>(requestUri);
+
+        return response?.Results?.ToArray() ?? Array.Empty<Movie>();
+    }
+
+    public async Task<IReadOnlyList<Movie>> GetTrendingMoviesAsync()
+    {
+        var requestUri = $"trending/movie/day?api_key={Uri.EscapeDataString(_apiKey)}";
+
+        var response = await _httpClient.GetFromJsonAsync<TmdbSearchResponse>(requestUri);
+
+        return response?.Results?.ToArray() ?? Array.Empty<Movie>();
+    }
+
     private sealed class TmdbSearchResponse
     {
         [JsonPropertyName("results")]
