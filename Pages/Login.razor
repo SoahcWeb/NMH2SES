@@ -5,37 +5,39 @@
 
 <PageTitle>Connexion</PageTitle>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h1 class="h3 text-center mb-4">Connexion</h1>
+<div class="favorites-layout">
 
-                    @if (!string.IsNullOrWhiteSpace(errorMessage))
-                    {
-                        <div class="alert alert-danger">@errorMessage</div>
-                    }
+    <h1 class="home-title">Connexion</h1>
 
-                    <div class="mb-3">
-                        <label class="form-label">Nom d'utilisateur</label>
-                        <input class="form-control" @bind="username" />
-                    </div>
+    <div class="section-divider"></div>
 
-                    <div class="mb-4">
-                        <label class="form-label">Mot de passe</label>
-                        <input class="form-control" type="password" @bind="password" />
-                    </div>
+    <div class="surface-card surface-card--centered login-card">
 
-                    <div class="d-grid">
-                        <button class="btn btn-primary" @onclick="HandleLogin">
-                            Connexion
-                        </button>
-                    </div>
-                </div>
-            </div>
+        @if (!string.IsNullOrWhiteSpace(errorMessage))
+        {
+            <p class="login-error">@errorMessage</p>
+        }
+
+        <label>Nom d'utilisateur</label>
+        <input class="form-control"
+               @bind="username"
+               placeholder="Entre ton nom..." />
+
+        <label>Mot de passe</label>
+        <input class="form-control"
+               type="password"
+               @bind="password"
+               placeholder="••••••••" />
+
+        <div class="favorite-actions">
+            <button class="app-button app-button--primary"
+                    @onclick="HandleLogin">
+                Se connecter
+            </button>
         </div>
+
     </div>
+
 </div>
 
 @code {

@@ -125,7 +125,7 @@ p {
 .app-nav__link {
     padding: 0.7rem 1rem;
     border-radius: 999px;
-    color: var(--color-muted);
+    color: #52C5FF;
     font-weight: 600;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
@@ -695,4 +695,145 @@ select:focus,
     background-color: #ffffff !important;
     border-color: #52C5FF !important;
     box-shadow: 0 0 0 3px rgba(82,197,255,0.15) !important;
+}
+
+/* =========================
+   MOVIE DETAILS STYLE
+   ========================= */
+
+.movie-details-card {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* résumé */
+.movie-overview {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* stats */
+.movie-stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(82,197,255,0.2);
+    border-radius: 12px;
+    padding: 10px 20px;
+    min-width: 120px;
+}
+
+.stat-box strong {
+    display: block;
+    color: #52C5FF;
+}
+
+.stat-box span {
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* =========================
+   MOVIE BACKGROUND EFFECT (NETFLIX STYLE)
+   ========================= */
+
+.movie-details-card {
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+/* overlay sombre + dégradé (BONUS inclus) */
+.movie-details-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(10,14,40,0.6),
+        rgba(10,14,40,0.95)
+    );
+    backdrop-filter: blur(8px);
+    z-index: 0;
+}
+
+/* contenu au-dessus */
+.movie-details-card * {
+    position: relative;
+    z-index: 1;
+}
+
+.favorite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(82,197,255,0.3);
+}
+
+/* =========================
+   LOGIN NHM STYLE
+   ========================= */
+
+.login-card {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* champs espacés */
+.login-card input {
+    margin-bottom: 15px;
+}
+
+/* message erreur stylé */
+.login-error {
+    color: #ff668d;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* =========================
+   NAVBAR BACKGROUND IMAGE
+   ========================= */
+
+.app-nav {
+    position: relative;
+    border-radius: 999px;
+    overflow: hidden;
+
+    background-image: url('/images/ban004.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* overlay pour lisibilité */
+.app-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to right,
+        rgba(10,14,40,0.85),
+        rgba(10,14,40,0.65),
+        rgba(10,14,40,0.85)
+    );
+
+    backdrop-filter: blur(6px);
+    z-index: 0;
+}
+
+/* liens au-dessus */
+.app-nav__link {
+    position: relative;
+    z-index: 1;
 }

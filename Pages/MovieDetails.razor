@@ -7,90 +7,97 @@
 
 <PageTitle>Détails du film</PageTitle>
 
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            @if (isLoading)
-            {
-                <div class="text-center py-4">
-                    <p class="mb-0">Chargement des détails du film...</p>
-                </div>
-            }
-            else if (movie is null)
-            {
-                <div class="alert alert-warning mb-3">
-                    Film introuvable.
-                </div>
+<div class="favorites-layout">
 
-                <div class="d-grid d-sm-flex gap-2">
-                    <button class="btn btn-secondary" @onclick="BackToMovies">
-                        Retour aux films
-                    </button>
-                </div>
+    <h1 class="home-title">Détails du film</h1>
+
+    <div class="section-divider"></div>
+
+    @if (isLoading)
+    {
+        <div class="surface-card surface-card--centered">
+            <p>Chargement des détails du film...</p>
+        </div>
+    }
+    else if (movie is null)
+    {
+        <div class="surface-card surface-card--centered">
+            <h2>Film introuvable</h2>
+
+            <button class="app-button app-button--secondary"
+                    @onclick="BackToMovies">
+                Retour aux films
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="surface-card movie-details-card"
+             style="background-image: url('@GetPosterUrl(movie?.PosterPath ?? "")');">
+
+            <!-- IMAGE -->
+            @if (!string.IsNullOrWhiteSpace(movie.PosterPath))
+            {
+                <img class="favorite-poster"
+                     src="@GetPosterUrl(movie.PosterPath)"
+                     alt="@movie.Title" />
             }
             else
             {
-                <div class="card shadow-sm">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            @if (!string.IsNullOrWhiteSpace(movie.PosterPath))
-                            {
-                                <img src="@GetPosterUrl(movie.PosterPath)"
-                                     alt="@movie.Title"
-                                     class="img-fluid rounded-top rounded-md-start"
-                                     style="width: 100%; height: 100%; object-fit: cover;" />
-                            }
-                            else
-                            {
-                                <div class="d-flex align-items-center justify-content-center bg-light text-muted h-100"
-                                     style="min-height: 400px;">
-                                    Aucune affiche
-                                </div>
-                            }
-                        </div>
-
-                        <div class="col-md-8">
-                            <div class="card-body p-4">
-                                <h1 class="card-title mb-3">@movie.Title</h1>
-                                <p class="card-text mb-4">@movie.Overview</p>
-
-                                <div class="row g-3 mb-4">
-                                    <div class="col-sm-6">
-                                        <div class="border rounded p-3 h-100">
-                                            <strong>Note moyenne</strong>
-                                            <div>@movie.VoteAverage.ToString("0.0")</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="border rounded p-3 h-100">
-                                            <strong>Nombre de votes</strong>
-                                            <div>@movie.VoteCount</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                @if (!string.IsNullOrWhiteSpace(message))
-                                {
-                                    <div class="alert alert-success mb-4">@message</div>
-                                }
-
-                                <div class="d-grid gap-2 d-sm-flex">
-                                    <button class="btn btn-primary"
-                                            @onclick="AddToFavorites">
-                                        Ajouter aux favoris
-                                    </button>
-                                    <button class="btn btn-secondary"
-                                            @onclick="BackToMovies">
-                                        Retour aux films
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="favorite-placeholder">
+                    Aucune affiche
                 </div>
             }
+
+            <!-- CONTENU -->
+            <div class="favorite-content">
+
+                <h2 class="favorite-title">@movie.Title</h2>
+
+                <p class="movie-overview">
+                    @movie.Overview
+                </p>
+
+                <!-- INFOS -->
+                <div class="movie-stats">
+
+                    <div class="stat-box">
+                        <strong>Note</strong>
+                        <span>@movie.VoteAverage.ToString("0.0")</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <strong>Votes</strong>
+                        <span>@movie.VoteCount</span>
+                    </div>
+
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(message))
+                {
+                    <p class="favorite-success">@message</p>
+                }
+
+                <!-- ACTIONS -->
+                <div class="favorite-actions">
+
+                    <button class="app-button app-button--primary"
+                            @onclick="AddToFavorites">
+                        Ajouter aux favoris
+                    </button>
+
+                    <button class="app-button app-button--secondary"
+                            @onclick="BackToMovies">
+                        Retour
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
-    </div>
+    }
+
 </div>
 
 @code {
@@ -119,10 +126,7 @@
 
     private void AddToFavorites()
     {
-        if (movie is null)
-        {
-            return;
-        }
+        if (movie is null) return;
 
         FavoriteService.Add(movie);
         message = $"\"{movie.Title}\" ajouté aux favoris.";
@@ -134,7 +138,5 @@
     }
 
     private static string GetPosterUrl(string posterPath)
-    {
-        return $"https://image.tmdb.org/t/p/w500{posterPath}";
-    }
+        => $"https://image.tmdb.org/t/p/w500{posterPath}";
 }

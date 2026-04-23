@@ -7,89 +7,101 @@
 
 <PageTitle>Films</PageTitle>
 
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <h1 class="mb-4">Films</h1>
+<div class="favorites-layout">
 
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <div class="row g-2 align-items-end">
-                        <div class="col-md-8">
-                            <label class="form-label">Rechercher par titre</label>
-                            <input class="form-control"
-                                   placeholder="Rechercher un titre de film..."
-                                   @bind="searchTitle" />
-                        </div>
-                        <div class="col-md-4 d-grid">
-                            <button class="btn btn-primary" @onclick="SearchMoviesAsync">
-                                Rechercher
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <h1 class="home-title">Explorer les films</h1>
 
-            @if (!string.IsNullOrWhiteSpace(message))
-            {
-                <div class="alert alert-info mb-4">@message</div>
-            }
+    <div class="section-divider"></div>
 
-            @if (!string.IsNullOrWhiteSpace(errorMessage))
-            {
-                <div class="alert alert-danger mb-4">@errorMessage</div>
-            }
+    <!-- SEARCH -->
+    <div class="surface-card">
 
-            @if (isLoading)
+        <label>Rechercher un film</label>
+
+        <input class="form-control"
+               placeholder="Tape un titre..."
+               @bind="searchTitle" />
+
+        <div class="favorite-actions">
+            <button class="app-button app-button--primary"
+                    @onclick="SearchMoviesAsync">
+                Rechercher
+            </button>
+        </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    @if (!string.IsNullOrWhiteSpace(message))
+    {
+        <div class="surface-card surface-card--centered">
+            <p>@message</p>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="surface-card surface-card--centered">
+            <p style="color: #ff668d">@errorMessage</p>
+        </div>
+    }
+
+    @if (isLoading)
+    {
+        <div class="surface-card surface-card--centered">
+            <p>Chargement des films...</p>
+        </div>
+    }
+    else if (movies.Count > 0)
+    {
+        <div class="favorites-grid">
+
+            @foreach (var movie in movies)
             {
-                <div class="text-center py-4">
-                    <p class="mb-0">Chargement des films...</p>
-                </div>
-            }
-            else if (movies.Count > 0)
-            {
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    @foreach (var movie in movies)
+                <div class="surface-card favorite-card">
+
+                    @if (!string.IsNullOrWhiteSpace(movie.PosterPath))
                     {
-                        <div class="col">
-                            <div class="card h-100 shadow-sm">
-                                @if (!string.IsNullOrWhiteSpace(movie.PosterPath))
-                                {
-                                    <img src="@GetPosterUrl(movie.PosterPath)"
-                                         class="card-img-top"
-                                         alt="@movie.Title"
-                                         style="height: 360px; object-fit: cover;" />
-                                }
-                                else
-                                {
-                                    <div class="d-flex align-items-center justify-content-center bg-light text-muted"
-                                         style="height: 360px;">
-                                        Aucune affiche
-                                    </div>
-                                }
-
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">@movie.Title</h5>
-                                    <p class="card-text mb-4">Note moyenne : @movie.VoteAverage.ToString("0.0")</p>
-
-                                    <div class="mt-auto d-grid gap-2 d-md-flex">
-                                        <button class="btn btn-outline-primary flex-md-fill"
-                                                @onclick="() => GoToDetails(movie.Id)">
-                                            Détails
-                                        </button>
-                                        <button class="btn btn-success flex-md-fill"
-                                                @onclick="() => AddToFavorites(movie)">
-                                            Ajouter aux favoris
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <img class="favorite-poster"
+                             src="@GetPosterUrl(movie.PosterPath)"
+                             alt="@movie.Title" />
+                    }
+                    else
+                    {
+                        <div class="no-image">
+                            Aucune image
                         </div>
                     }
+
+                    <div class="favorite-content">
+
+                        <h2 class="favorite-title">@movie.Title</h2>
+
+                        <p>⭐ @movie.VoteAverage.ToString("0.0")</p>
+
+                        <div class="favorite-actions">
+
+                            <button class="app-button app-button--secondary"
+                                    @onclick="() => GoToDetails(movie.Id)">
+                                Détails
+                            </button>
+
+                            <button class="app-button app-button--primary"
+                                    @onclick="() => AddToFavorites(movie)">
+                                Favoris
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
             }
+
         </div>
-    </div>
+    }
+
 </div>
 
 @code {
